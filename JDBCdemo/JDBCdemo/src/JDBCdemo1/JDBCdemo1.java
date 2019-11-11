@@ -10,22 +10,32 @@ public  class JDBCdemo1{
     }
     //删除（可以直接传入删除的定位数据）
     public static void delete(String tableName,String locatedName,String locateData) throws SQLException {
-        String sql="DELETE FROM "+tableName+" WHERE "+locatedName+"="+locateData+"";
+        String sql="DELETE FROM "+tableName+" WHERE "+locatedName+"='"+locateData+"'";
         Statement statement=connection.createStatement();
         statement.executeUpdate(sql);
     }
-    //查找（可以直接传入查找的数据）
-    public static String select( String selectName, String tableName, String locatedName, String locatedData) throws SQLException{
-        String sql="SELECT "+selectName+" FROM "+tableName+" WHERE "+locatedName+"="+locatedData+"";
-        Statement statement=connection.createStatement();
-        ResultSet resultSet=statement.executeQuery(sql);
-        resultSet.next();
-        System.out.println(resultSet.getString(selectName));
-        return resultSet.getString(selectName);
+    //查找（可以直接传入查找的数据,judge进行判定，为了方便自己，当judge为1的时候需要两个判定条件，为0时需要一个判定条件，总而言之，如果judge为0，judge后面的数据可以随意输入，如果judge为1，则根据需求进行输入）
+    public static ResultSet select(int judge,String selectName, String tableName, String locatedName, String locatedData, String locatedName2, String locatedData2) throws SQLException{
+        if (judge==0){
+            String sql="SELECT "+selectName+" FROM "+tableName+" WHERE "+locatedName+"='"+locatedData+"'";
+            Statement statement=connection.createStatement();
+            ResultSet resultSet=statement.executeQuery(sql);
+            return resultSet;
+        }else if (judge==1){
+            String sql="SELECT "+selectName+" FROM "+tableName+" WHERE "+locatedName+"='"+locatedData+"' AND "+locatedName2+"='"+locatedData2+"'";
+            Statement statement=connection.createStatement();
+            ResultSet resultSet=statement.executeQuery(sql);
+            return resultSet;
+        }else{
+            String sql="SELECT * FROM "+tableName+"";
+            Statement statement=connection.createStatement();
+            ResultSet resultSet=statement.executeQuery(sql);
+            return resultSet;
+        }
     }
     //修改（可以直接传入修改的数据）
     public static void update(String updateName,String updateData,String tableName,String locatedName,String locatedData) throws SQLException {
-        String sql="UPDATE "+tableName+" SET "+updateName+"='"+updateData+"' WHERE "+locatedName+"="+locatedData+"";
+        String sql="UPDATE "+tableName+" SET "+updateName+"='"+updateData+"' WHERE "+locatedName+"='"+locatedData+"'";
         Statement statement=connection.createStatement();
         statement.executeUpdate(sql);
     }
